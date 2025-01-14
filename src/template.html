@@ -6,6 +6,25 @@
   <title>Document</title>
 </head>
 <body>
+  <header>
+    <h1>WHAT 2 DO</h1>
+  </header>
+  <div class="sidebar">
+    <button type="button" class="new-project">New Project</button>
+    <form method="dialog" class="new-project-form" style="display: none;">
+      <div>
+        <label for="name">Project Name :</label>
+        <input type="text" name="name" id="name">
+      </div>
+      <div class="form-button">
+        <button type="submit" id="submit" >Confirm</button>
+      </div>
+    </form>
+    <div class="projects">
+      <h3>Projects</h3>
+      <div class="projects-list"></div>
+    </div>
+  </div>
   
 </body>
 </html>
