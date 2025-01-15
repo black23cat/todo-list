@@ -55,6 +55,10 @@ export default function ManageProject(){
     return projectTodoList;
   };
 
+  const deleteProject = (projectIndex) => {
+    projects.splice(projectIndex, 1);
+  }
+
   const getTodayDate = () => {
     return todayDate;
   }
@@ -64,6 +68,7 @@ export default function ManageProject(){
     newTodoList,
     getProjectList,
     getProjectTodoList,
+    deleteProject,
     getTodayDate
   }
 }

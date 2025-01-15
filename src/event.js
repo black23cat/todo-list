@@ -48,6 +48,11 @@ export default function event(){
       console.log(currentProjectIndex);
       return;
     }
+    if(target.classList.contains('delete-project')){
+      currentProjectIndex = target.dataset.index;
+      project.deleteProject(currentProjectIndex);
+      screen.updateProjectDisplay(projectsList, project.getProjectList());
+    }
   }
 
   function contentEventHandler(event){

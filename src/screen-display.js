@@ -10,6 +10,7 @@ export default function ScreenDisplay(){
   
   const updateProjectDisplay = ( parentNode, array ) => {
     clearParentNode( parentNode );
+    if(array.length === 0) return;
     for(let i = 0; i < array.length ; i ++){
       const projectBtnWrapper = document.createElement('div');
       const projectName = document.createElement('button');
@@ -20,6 +21,7 @@ export default function ScreenDisplay(){
       projectName.setAttribute('data-index', i);
       deleteProjectBtn.textContent = 'X';
       deleteProjectBtn.classList.add('delete-project');
+      deleteProjectBtn.setAttribute('data-index', i);
       projectBtnWrapper.appendChild(projectName);
       projectBtnWrapper.appendChild(deleteProjectBtn);
       parentNode.appendChild(projectBtnWrapper);
