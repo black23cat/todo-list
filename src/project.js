@@ -1,3 +1,8 @@
+import { formatDistance } from "date-fns";
+import { lightFormat } from 'date-fns';
+
+const todayDate = lightFormat(new Date(), 'yyyy-MM-dd');
+
 class Project {
   constructor(name){
     this.projectName = name;
@@ -8,7 +13,7 @@ class Project {
 class Todo {
   constructor(title, dueDate, desc, priority){
     this.title = title;
-    this.dueDate = dueDate;
+    this.dueDate = formatDistance(dueDate, todayDate, {addSuffix: true});
     this.description = desc;
     this.priority = priority;
   }
@@ -22,18 +27,14 @@ export default function ManageProject(){
     console.log(projects);
   };
 
-  const addTodoList = ( projectIndex,
-    title,
-    dueDate,
-    description,
-    priority
-    ) => {
-      projects[projectIndex].todoList.push(new Todo(
-        title, 
-        dueDate, 
-        description, 
-        priority
-      ));
+  const newTodoList = ( projectIndex, array ) => {
+    const [title, description, dueDate, priority] = array;
+    projects[projectIndex].todoList.push(new Todo(
+      title, 
+      dueDate, 
+      description, 
+      priority
+    ));
   };
 
   const getProjectList = () => {
@@ -45,21 +46,24 @@ export default function ManageProject(){
   };
 
   const getProjectTodoList = (projectIndex) => {
-    const todoList = [];
-    todoList.push(projects[projectIndex].todoList);
-    console.log(todoList);
-    return todoList;
+    const projectTodoList = [];
+    projects[projectIndex].todoList.forEach((list) => {
+      projectTodoList.push(list);
+    });
+    
+    console.log(projectTodoList);
+    return projectTodoList;
   };
 
-  const deleteProject = (projectIndex) => {
-    projects.splice(projectIndex, 1);
+  const getTodayDate = () => {
+    return todayDate;
   }
 
   return {
     newProject,
-    addTodoList,
+    newTodoList,
     getProjectList,
     getProjectTodoList,
-    deleteProject
+    getTodayDate
   }
 }
