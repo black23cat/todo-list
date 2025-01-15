@@ -1,6 +1,7 @@
 export default function ScreenDisplay(){
   const updateContentDisplay = ( parentNode, array) => {
     clearParentNode( parentNode );
+    if(array === undefined) return;
     const addTodoBtn = document.createElement('button');
     addTodoBtn.classList.add('new-todo');
     addTodoBtn.textContent = '+';
@@ -53,6 +54,8 @@ export default function ScreenDisplay(){
         (array[i].priority === 'medium') ? '#FFB52E' :
         '#FF0000';
       deleteTodoBtn.textContent = 'x';
+      deleteTodoBtn.classList.add('delete-todo');
+      // deleteTodoBtn.setAttribute('data-todo-index', i);
 
       card.appendChild(title);
       card.appendChild(description);
@@ -68,8 +71,15 @@ export default function ScreenDisplay(){
     parentNode.textContent = '';
   }
 
+  const initialize = (projectNode, contentNode, projectArr, todoArr) => {
+    updateProjectDisplay(projectNode, projectArr)
+    updateContentDisplay(contentNode, todoArr);
+
+  }
+
   return {
     updateContentDisplay,
-    updateProjectDisplay
+    updateProjectDisplay,
+    initialize
   }
 }

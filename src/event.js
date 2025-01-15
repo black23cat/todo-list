@@ -6,15 +6,16 @@ export default function event(){
   const screen = ScreenDisplay();
   const sidebar = document.querySelector('.sidebar');
   const newProjectForm = document.querySelector('.new-project-form');
-  const addTodoForm = document.querySelector('.add-todo');
+  const newTodoForm = document.querySelector('.new-todo');
   const dueDateInput = document.querySelector('[name=due-date]');
   const content = document.querySelector('.content');
   const mainContent = document.querySelector('.main-content');
   const projectsList = document.querySelector('.projects-list');
-  let currentProjectIndex;
+  let currentProjectIndex = 0;
   dueDateInput.setAttribute('min', project.getTodayDate());
   sidebar.addEventListener('click', sidebarEventHandler);
-  content.addEventListener('click', contentEventHandler);
+  newTodoForm.addEventListener('click', newTodoFormEventHandler);
+  mainContent.addEventListener('click', mainContentEventHandler);
 
   function sidebarEventHandler(event){
     const target = event.target;
@@ -52,19 +53,16 @@ export default function event(){
       currentProjectIndex = target.dataset.index;
       project.deleteProject(currentProjectIndex);
       screen.updateProjectDisplay(projectsList, project.getProjectList());
+      screen.updateContentDisplay(mainContent);
+      console.log(project.getProjectList())
     }
   }
 
-  function contentEventHandler(event){
+  function newTodoFormEventHandler(event){
     const target = event.target;
 
-    if(target.classList.contains('new-todo')){
-      addTodoForm.style.display = 'block';
-      return;
-    }
-
     if(target.id === 'submit'){
-      const formInput = [...addTodoForm.getElementsByTagName('input')].map(input => input.value);
+      const formInput = [...newTodoForm.getElementsByTagName('input')].map(input => input.value);
       formInput.push(document.getElementById('priority').value);
 
       if(formInput.includes('')){
@@ -76,11 +74,35 @@ export default function event(){
         mainContent, 
         project.getProjectTodoList(currentProjectIndex)
       );
-      addTodoForm.style.display = 'none';
+      newTodoForm.style.display = 'none';
     }
     if(target.id === 'cancel'){
-      addTodoForm.reset();
-      addTodoForm.style.display = 'none';
+      newTodoForm.reset();
+      newTodoForm.style.display = 'none';
     }
   }
+
+  function mainContentEventHandler (event) {
+    const target = event.target;
+    const todoCardIndex = target.parentNode.getAttribute('data-todo-index');
+
+    if(target.classList.contains('new-todo')){
+      newTodoForm.style.display = 'block';
+      return;
+    }
+    if(target.classList.contains('delete-todo')){
+      mainContent.removeChild(target.parentNode);
+      console.log(target);
+      project.deleteTodoList(currentProjectIndex, todoCardIndex);
+      console.log(project.getProjectTodoList(currentProjectIndex));
+      screen.updateContentDisplay(mainContent, project.getProjectTodoList(currentProjectIndex));
+    }
+
+  }
+
+  screen.initialize(
+    projectsList, mainContent, 
+    project.getProjectList(), 
+    project.getProjectTodoList(0)
+  );
 }

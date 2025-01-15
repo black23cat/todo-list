@@ -13,7 +13,7 @@ class Project {
 class Todo {
   constructor(title, dueDate, desc, priority){
     this.title = title;
-    this.dueDate = formatDistance(dueDate, todayDate, {addSuffix: true});
+    this.dueDate = `Due ${formatDistance(dueDate, todayDate, {addSuffix: true})}`;
     this.description = desc;
     this.priority = priority;
   }
@@ -59,9 +59,18 @@ export default function ManageProject(){
     projects.splice(projectIndex, 1);
   }
 
+  const deleteTodoList = (projectIndex, todoIndex) => {
+    projects[projectIndex].todoList.splice(todoIndex, 1);
+  }
+
   const getTodayDate = () => {
     return todayDate;
   }
+
+  // DELETE LATER
+  newProject('TEST');
+  newTodoList(0, ['TEST TITLE', 'TEST DESCRIPTION', '2040-01-01', 'medium']);
+  ///////////////////////////////////////////////////////////////////////////
 
   return {
     newProject,
@@ -69,6 +78,7 @@ export default function ManageProject(){
     getProjectList,
     getProjectTodoList,
     deleteProject,
+    deleteTodoList,
     getTodayDate
   }
 }
