@@ -41,7 +41,7 @@ export default function event(){
       return;
     }
     if(target.classList.contains('project-btn')){
-      currentProjectIndex = target.dataset.index;
+      currentProjectIndex = target.parentNode.dataset.projectIndex;
       screen.updateContentDisplay(
         mainContent, 
         project.getProjectTodoList(currentProjectIndex)
@@ -50,7 +50,7 @@ export default function event(){
       return;
     }
     if(target.classList.contains('delete-project')){
-      currentProjectIndex = target.dataset.index;
+      currentProjectIndex = target.parentNode.dataset.projectIndex;
       project.deleteProject(currentProjectIndex);
       screen.updateProjectDisplay(projectsList, project.getProjectList());
       screen.updateContentDisplay(mainContent);
@@ -62,7 +62,8 @@ export default function event(){
     const target = event.target;
 
     if(target.id === 'submit'){
-      const formInput = [...newTodoForm.getElementsByTagName('input')].map(input => input.value);
+      const formInput = [...newTodoForm.getElementsByTagName('input')]
+                        .map(input => input.value);
       formInput.push(document.getElementById('priority').value);
 
       if(formInput.includes('')){

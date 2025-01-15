@@ -17,12 +17,11 @@ export default function ScreenDisplay(){
       const projectName = document.createElement('button');
       const deleteProjectBtn = document.createElement('button');
       projectBtnWrapper.classList.add('project-list-wrapper');
+      projectBtnWrapper.setAttribute('data-project-index', i);
       projectName.textContent = array[i].projectName;
       projectName.classList.add('project-btn');
-      projectName.setAttribute('data-index', i);
       deleteProjectBtn.textContent = 'X';
       deleteProjectBtn.classList.add('delete-project');
-      deleteProjectBtn.setAttribute('data-index', i);
       projectBtnWrapper.appendChild(projectName);
       projectBtnWrapper.appendChild(deleteProjectBtn);
       parentNode.appendChild(projectBtnWrapper);
