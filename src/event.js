@@ -1,7 +1,7 @@
 import ManageProject from './project.js';
 import ScreenDisplay from './screen-display.js';
 
-function event(){
+export default function event(){
   const project = ManageProject();
   const screen = ScreenDisplay();
   const sidebar = document.querySelector('.sidebar');
@@ -41,7 +41,7 @@ function event(){
     }
     if(target.classList.contains('project-btn')){
       currentProjectIndex = target.dataset.index;
-      screen.generateContentDisplay(
+      screen.updateContentDisplay(
         mainContent, 
         project.getProjectTodoList(currentProjectIndex)
       );
@@ -67,7 +67,7 @@ function event(){
         return;
       }
       project.newTodoList(currentProjectIndex, formInput);
-      screen.generateContentDisplay(
+      screen.updateContentDisplay(
         mainContent, 
         project.getProjectTodoList(currentProjectIndex)
       );
@@ -79,5 +79,3 @@ function event(){
     }
   }
 }
-
-export { event }
