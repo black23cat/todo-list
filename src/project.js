@@ -6,20 +6,21 @@ class Project {
 }
 
 class Todo {
-  constructor(title, dueDate, desc, priority){
+  constructor(title, dueDate, desc, priority, completed = false){
     this.title = title;
     this.dueDate = dueDate;
     this.description = desc;
     this.priority = priority;
-    this.isDone = false;
+    this.completed = completed;
   }
 
   updateValue(array){
-    const [title, desc, dueDate, priority] = array;
+    const [title, desc, dueDate, priority, completed] = array;
     this.title = title;
     this.dueDate = dueDate;
     this.description = desc;
     this.priority = priority;
+    this.completed = (completed === 'true');
   }
 }
 
@@ -32,12 +33,13 @@ export default function ManageProject(){
   };
 
   const newTodoList = ( projectIndex, array ) => {
-    const [title, description, dueDate, priority] = array;
+    const [title, description, dueDate, priority, completed = false] = array;
     projects[projectIndex].todoList.push(new Todo(
       title, 
       dueDate, 
       description, 
-      priority
+      priority,
+      completed
     ));
   };
 

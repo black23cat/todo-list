@@ -96,7 +96,8 @@ export default function event(){
       document.getElementById('edit-description').value = currentTodoList.description;
       document.getElementById('edit-due-date').value = currentTodoList.dueDate;
       document.getElementById('edit-priority').value = currentTodoList.priority;
-      editTodoForm.setAttribute('data-todo-index', todoCardIndex);
+      editTodoForm. setAttribute('data-todo-index', todoCardIndex);
+
 
       editTodoModal.showModal();
     }
@@ -120,7 +121,10 @@ export default function event(){
       const editFormInput = [...editTodoForm.getElementsByTagName('input')]
       .map(input => input.value); 
       editFormInput.push(document.getElementById('edit-priority').value);
+      editFormInput.push(document.getElementById('completed').value);
       if(checkEmptyForm(editFormInput)){ return; };
+
+      console.log(editFormInput)
     
       project.editTodoList(currentProjectIndex, todoCardIndex, editFormInput);
       screen.updateContentDisplay(mainContent, project.getProjectTodoList(currentProjectIndex));
@@ -137,14 +141,15 @@ export default function event(){
       return true;
     }
   }
-  // INITIAL RENDER ////////////////////////////////////////////////////
+  //////////////// INITIAL RENDER ////////////////
   project.newProject('TEST');
-  project.newTodoList( currentProjectIndex, ['TEST TITLE', 'TEST DESCRIPTION', '2028-01-01', 'medium'] );
-  project.newTodoList( currentProjectIndex, ['TEST CHECKED', 'CHECKED DESCRIPTION', '2028-01-01', 'low'] );
+  project.newTodoList( currentProjectIndex, ['Lorem ipsum', 'dolor sit amet, consectetur adipiscing elit', '2028-01-01', 'low'] );
+  project.newTodoList( currentProjectIndex, ['TEST CHECKED', 'Proin non nulla id nisl tempor tempus', '2028-01-01', 'medium', 'true']);
+  project.newTodoList( currentProjectIndex, ['TEST ', 'In hac habitasse platea dictumst.', '2028-01-01', 'high']);
   screen.initialize(
     projectsList, mainContent, 
     project.getProjectList(), 
     project.getProjectTodoList(currentProjectIndex)
   );
-  /////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////
 }

@@ -42,7 +42,7 @@ export default function ScreenDisplay(){
       const card = document.createElement('div');
       const title = document.createElement('h4');
       const dueDate = document.createElement('p');
-      const description = document.createElement('div');
+      const description = document.createElement('p');
       const priority = document.createElement('span');
       const deleteTodoBtn = document.createElement('button');
   
@@ -52,7 +52,7 @@ export default function ScreenDisplay(){
       dueDate.textContent = ` Due 
               ${formatDistance( array[i].dueDate, todayDate, {addSuffix: true})}`;
       description.textContent = array[i].description;
-      description.setAttribute('class', 'todo-desc edit');
+
       priority.textContent = array[i].priority.toUpperCase();
       priority.style.backgroundColor = 
         (array[i].priority === 'low') ? 'lightgreen' :
@@ -60,7 +60,14 @@ export default function ScreenDisplay(){
         '#FF0000';
       deleteTodoBtn.textContent = 'x';
       deleteTodoBtn.classList.add('delete-todo');
-
+      if(!array[i].completed){
+        description.setAttribute('class', 'todo-desc edit');
+      }else{
+        description.setAttribute('class', 'todo-desc');
+      }
+      if(array[i].completed){
+        card.classList.add('checked');
+      }
 
       card.appendChild(title);
       card.appendChild(description);
