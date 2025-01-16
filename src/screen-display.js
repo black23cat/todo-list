@@ -1,3 +1,7 @@
+import { formatDistance } from "date-fns";
+import { lightFormat } from 'date-fns';
+const todayDate = lightFormat(new Date(), 'yyyy-MM-dd');
+
 export default function ScreenDisplay(){
   const updateContentDisplay = ( parentNode, array) => {
     clearParentNode( parentNode );
@@ -38,23 +42,25 @@ export default function ScreenDisplay(){
       const card = document.createElement('div');
       const title = document.createElement('h4');
       const dueDate = document.createElement('p');
-      const description = document.createElement('p');
+      const description = document.createElement('div');
       const priority = document.createElement('span');
       const deleteTodoBtn = document.createElement('button');
   
       card.classList.add('todo-card');
       card.setAttribute('data-todo-index', i);
       title.textContent = array[i].title;
-      dueDate.textContent = array[i].dueDate;
+      dueDate.textContent = ` Due 
+              ${formatDistance( array[i].dueDate, todayDate, {addSuffix: true})}`;
       description.textContent = array[i].description;
-      priority.textContent = array[i].priority;
+      description.setAttribute('class', 'todo-desc edit');
+      priority.textContent = array[i].priority.toUpperCase();
       priority.style.backgroundColor = 
         (array[i].priority === 'low') ? 'lightgreen' :
         (array[i].priority === 'medium') ? '#FFB52E' :
         '#FF0000';
       deleteTodoBtn.textContent = 'x';
       deleteTodoBtn.classList.add('delete-todo');
-      // deleteTodoBtn.setAttribute('data-todo-index', i);
+
 
       card.appendChild(title);
       card.appendChild(description);

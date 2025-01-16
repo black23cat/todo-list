@@ -1,8 +1,3 @@
-import { formatDistance } from "date-fns";
-import { lightFormat } from 'date-fns';
-
-const todayDate = lightFormat(new Date(), 'yyyy-MM-dd');
-
 class Project {
   constructor(name){
     this.projectName = name;
@@ -13,7 +8,16 @@ class Project {
 class Todo {
   constructor(title, dueDate, desc, priority){
     this.title = title;
-    this.dueDate = `Due ${formatDistance(dueDate, todayDate, {addSuffix: true})}`;
+    this.dueDate = dueDate;
+    this.description = desc;
+    this.priority = priority;
+    this.isDone = false;
+  }
+
+  updateValue(array){
+    const [title, desc, dueDate, priority] = array;
+    this.title = title;
+    this.dueDate = dueDate;
     this.description = desc;
     this.priority = priority;
   }
@@ -36,6 +40,13 @@ export default function ManageProject(){
       priority
     ));
   };
+
+  const editTodoList = (projectIndex, todoIndex, array) => {
+
+    projects[projectIndex].todoList[todoIndex].updateValue(array);
+    console.log(projects[projectIndex].todoList[todoIndex]);
+    // console.log(getProjectTodoList(projectIndex));
+  }
 
   const getProjectList = () => {
     const projectList = [];
@@ -63,22 +74,13 @@ export default function ManageProject(){
     projects[projectIndex].todoList.splice(todoIndex, 1);
   }
 
-  const getTodayDate = () => {
-    return todayDate;
-  }
-
-  // DELETE LATER
-  newProject('TEST');
-  newTodoList(0, ['TEST TITLE', 'TEST DESCRIPTION', '2040-01-01', 'medium']);
-  ///////////////////////////////////////////////////////////////////////////
-
   return {
     newProject,
     newTodoList,
+    editTodoList,
     getProjectList,
     getProjectTodoList,
     deleteProject,
-    deleteTodoList,
-    getTodayDate
+    deleteTodoList
   }
 }

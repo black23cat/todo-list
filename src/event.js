@@ -1,36 +1,35 @@
 import ManageProject from './project.js';
 import ScreenDisplay from './screen-display.js';
+import { lightFormat } from 'date-fns';
 
 export default function event(){
   const project = ManageProject();
   const screen = ScreenDisplay();
   const sidebar = document.querySelector('.sidebar');
+  const newProjectFormModal = document.querySelector('dialog.new-project-modal');
   const newProjectForm = document.querySelector('.new-project-form');
+  const newTodoFormModal = document.querySelector('dialog.new-todo-modal')
   const newTodoForm = document.querySelector('.new-todo');
+  const editTodoModal = document.querySelector('dialog.edit-todo-modal');
+  const editTodoForm = document.querySelector('.edit-todo');
   const dueDateInput = document.querySelector('[name=due-date]');
-  const content = document.querySelector('.content');
   const mainContent = document.querySelector('.main-content');
   const projectsList = document.querySelector('.projects-list');
   let currentProjectIndex = 0;
-  dueDateInput.setAttribute('min', project.getTodayDate());
+  dueDateInput.setAttribute('min', lightFormat(new Date(), 'yyyy-MM-dd'));
   sidebar.addEventListener('click', sidebarEventHandler);
   newTodoForm.addEventListener('click', newTodoFormEventHandler);
+  editTodoForm.addEventListener('click', editTodoFormHandler);
   mainContent.addEventListener('click', mainContentEventHandler);
 
   function sidebarEventHandler(event){
     const target = event.target;
-    const formDisplay = newProjectForm.style.display;
     if(target.classList.contains('new-project')){
-      if(formDisplay === 'none'){
-        newProjectForm.style.display = 'block';
-      }else{
-        newProjectForm.style.display = 'none';
-      }
-      return;
+      newProjectFormModal.showModal();
     }
     if(target.id === 'submit'){
       const newProjectName = document.getElementById('name').value;
-      newProjectForm.style.display = 'none';
+      newProjectFormModal.close()
       if(newProjectName === '') return;
       //CODE TO ADD NEW PROJECT
       project.newProject(newProjectName);
@@ -66,20 +65,18 @@ export default function event(){
                         .map(input => input.value);
       formInput.push(document.getElementById('priority').value);
 
-      if(formInput.includes('')){
-        alert('Fill the fields');
-        return;
-      }
+      if(checkEmptyForm(formInput)){ return; }
       project.newTodoList(currentProjectIndex, formInput);
       screen.updateContentDisplay(
         mainContent, 
         project.getProjectTodoList(currentProjectIndex)
       );
-      newTodoForm.style.display = 'none';
+      newTodoForm.reset();
+      newTodoFormModal.close();
+      console.log(formInput)
     }
     if(target.id === 'cancel'){
       newTodoForm.reset();
-      newTodoForm.style.display = 'none';
     }
   }
 
@@ -88,22 +85,66 @@ export default function event(){
     const todoCardIndex = target.parentNode.getAttribute('data-todo-index');
 
     if(target.classList.contains('new-todo')){
-      newTodoForm.style.display = 'block';
-      return;
+      newTodoFormModal.showModal();
     }
+
+    if(target.classList.contains('edit')){
+      const currentTodoList = 
+        project.getProjectTodoList(currentProjectIndex)[todoCardIndex];
+
+      document.getElementById('edit-title').value = currentTodoList.title;
+      document.getElementById('edit-description').value = currentTodoList.description;
+      document.getElementById('edit-due-date').value = currentTodoList.dueDate;
+      document.getElementById('edit-priority').value = currentTodoList.priority;
+      editTodoForm.setAttribute('data-todo-index', todoCardIndex);
+
+      editTodoModal.showModal();
+    }
+
     if(target.classList.contains('delete-todo')){
       mainContent.removeChild(target.parentNode);
       console.log(target);
       project.deleteTodoList(currentProjectIndex, todoCardIndex);
       console.log(project.getProjectTodoList(currentProjectIndex));
-      screen.updateContentDisplay(mainContent, project.getProjectTodoList(currentProjectIndex));
+      screen.updateContentDisplay(
+        mainContent, 
+        project.getProjectTodoList(currentProjectIndex));
     }
 
   }
 
+  function editTodoFormHandler(event){
+    const target = event.target;
+    if(target.id === 'edit-submit'){
+      const todoCardIndex = editTodoForm.getAttribute('data-todo-index')
+      const editFormInput = [...editTodoForm.getElementsByTagName('input')]
+      .map(input => input.value); 
+      editFormInput.push(document.getElementById('edit-priority').value);
+      if(checkEmptyForm(editFormInput)){ return; };
+    
+      project.editTodoList(currentProjectIndex, todoCardIndex, editFormInput);
+      screen.updateContentDisplay(mainContent, project.getProjectTodoList(currentProjectIndex));
+      editTodoModal.close();
+    }
+    if(target.id === 'edit-cancel'){
+      editTodoForm.reset();
+    }
+  }
+
+  function checkEmptyForm(array){
+    if(array.includes('')){
+      alert('Fill the Fields');
+      return true;
+    }
+  }
+  // INITIAL RENDER ////////////////////////////////////////////////////
+  project.newProject('TEST');
+  project.newTodoList( currentProjectIndex, ['TEST TITLE', 'TEST DESCRIPTION', '2028-01-01', 'medium'] );
+  project.newTodoList( currentProjectIndex, ['TEST CHECKED', 'CHECKED DESCRIPTION', '2028-01-01', 'low'] );
   screen.initialize(
     projectsList, mainContent, 
     project.getProjectList(), 
-    project.getProjectTodoList(0)
+    project.getProjectTodoList(currentProjectIndex)
   );
+  /////////////////////////////////////////////////////////////////////
 }
