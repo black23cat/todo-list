@@ -60,11 +60,13 @@ export default function ScreenDisplay(){
         '#FF0000';
       deleteTodoBtn.textContent = 'x';
       deleteTodoBtn.classList.add('delete-todo');
+
       if(!array[i].completed){
         description.setAttribute('class', 'todo-desc edit');
       }else{
         description.setAttribute('class', 'todo-desc');
       }
+      
       if(array[i].completed){
         card.classList.add('checked');
       }

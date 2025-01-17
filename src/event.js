@@ -108,7 +108,7 @@ export default function event(){
       screen.updateContentDisplay(
         mainContent, 
         project.getProjectTodoList(currentProjectIndex));
-
+        
       project.updateStorage();
     }
   }
@@ -140,14 +140,9 @@ export default function event(){
     }
   }
   
-  if(localStorage.getItem('projects') !== null){
-    project.getLocalStorage();
-    console.log(project.getProjectList())
-
-    screen.initialize(
-      projectsList, mainContent, 
-      project.getProjectList(), 
-      project.getProjectTodoList(currentProjectIndex)
-    );
-  }
+  screen.initialize(
+    projectsList, mainContent, 
+    project.getProjectList(), 
+    project.getProjectTodoList(currentProjectIndex)
+  );
 }

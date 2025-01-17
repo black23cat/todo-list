@@ -70,18 +70,11 @@ export default function ManageProject(){
   }
 
   const deleteTodoList = (projectIndex, todoIndex) => {
-    console.log(projects[projectIndex].todoList[todoIndex]);
     projects[projectIndex].todoList.splice(todoIndex, 1);
-    console.log(projects[projectIndex].todoList);
   }
 
   const updateStorage = () => {
-    if(!localStorage.getItem('projects')){
-      localStorage.setItem('projects', JSON.stringify(projects));
-    }else {
-      localStorage.removeItem('projects');
-      localStorage.setItem('projects', JSON.stringify(projects));
-    }
+    localStorage.setItem('projects', JSON.stringify(projects));
   }
 
   const getLocalStorage = () => {
@@ -90,14 +83,21 @@ export default function ManageProject(){
     for(let i = 0; i < projectStorage.length ; i++){
       projects.push(new Project(projectStorage[i].projectName));
       for(let j = 0 ; j < projectStorage[i].todoList.length ; j ++){
-        console.log(projectStorage[i].todoList[j]);
         const {title, description, dueDate, priority, completed} = projectStorage[i].todoList[j];
         projects[i].todoList.push(new Todo(title, dueDate, description, priority, completed))
       }
     }
 
-    console.log(projectStorage);
-    console.log(localStorage.getItem('projects'));
+  }
+
+  if(localStorage.getItem('projects') === null){
+    newProject('TEST PROJECT');
+    newTodoList(0, ['TEST TITLE', 'Lorem ipsum dolor sit amet', '2025-02-01', 'low', false]);
+    newTodoList(0, ['CHECKED TASKS', 'Consectetur adipiscing elit', '2025-02-12', 'medium', 'true']);
+    newTodoList(0, ['TASKS', 'Phasellus feugiat nisi eu turpis', '2025-01-12', 'high', false]);
+    updateStorage();
+  } else {
+    getLocalStorage();
   }
 
   return {
