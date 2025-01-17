@@ -33,7 +33,7 @@ export default function ScreenDisplay(){
   }
   
   const generateContentDisplay = ( parentNode, array ) => {
-    if(array.length === 0){
+    if(array.length === 0 ){
       const contentPara = document.createElement('p');
       contentPara.textContent = 'No tasks.';
       parentNode.appendChild(contentPara);
@@ -76,15 +76,15 @@ export default function ScreenDisplay(){
       card.appendChild(deleteTodoBtn);      
       parentNode.appendChild(card);
     }
-    console.log(parentNode)
   }
 
   const clearParentNode = (parentNode) => {
     parentNode.textContent = '';
   }
 
-  const initialize = (projectNode, contentNode, projectArr, todoArr) => {
-    updateProjectDisplay(projectNode, projectArr)
+  const initialize = (projectNode, contentNode, projectArr, todoArr) => {   
+    if(projectArr.length === 0 || projectArr === undefined) return;
+    updateProjectDisplay(projectNode, projectArr);
     updateContentDisplay(contentNode, todoArr);
 
   }

@@ -29,7 +29,6 @@ export default function ManageProject(){
 
   const newProject = (name) => {
     projects.push(new Project(name));
-    console.log(projects);
   };
 
   const newTodoList = ( projectIndex, array ) => {
@@ -44,10 +43,7 @@ export default function ManageProject(){
   };
 
   const editTodoList = (projectIndex, todoIndex, array) => {
-
     projects[projectIndex].todoList[todoIndex].updateValue(array);
-    console.log(projects[projectIndex].todoList[todoIndex]);
-    // console.log(getProjectTodoList(projectIndex));
   }
 
   const getProjectList = () => {
@@ -60,11 +56,12 @@ export default function ManageProject(){
 
   const getProjectTodoList = (projectIndex) => {
     const projectTodoList = [];
-    projects[projectIndex].todoList.forEach((list) => {
-      projectTodoList.push(list);
-    });
+    if(projects[projectIndex] !== undefined){    
+      projects[projectIndex].todoList.forEach((list) => {
+        projectTodoList.push(list);
+      });
+    }
     
-    console.log(projectTodoList);
     return projectTodoList;
   };
 
@@ -73,7 +70,34 @@ export default function ManageProject(){
   }
 
   const deleteTodoList = (projectIndex, todoIndex) => {
+    console.log(projects[projectIndex].todoList[todoIndex]);
     projects[projectIndex].todoList.splice(todoIndex, 1);
+    console.log(projects[projectIndex].todoList);
+  }
+
+  const updateStorage = () => {
+    if(!localStorage.getItem('projects')){
+      localStorage.setItem('projects', JSON.stringify(projects));
+    }else {
+      localStorage.removeItem('projects');
+      localStorage.setItem('projects', JSON.stringify(projects));
+    }
+  }
+
+  const getLocalStorage = () => {
+    const projectStorage = JSON.parse(localStorage.getItem('projects'));
+
+    for(let i = 0; i < projectStorage.length ; i++){
+      projects.push(new Project(projectStorage[i].projectName));
+      for(let j = 0 ; j < projectStorage[i].todoList.length ; j ++){
+        console.log(projectStorage[i].todoList[j]);
+        const {title, description, dueDate, priority, completed} = projectStorage[i].todoList[j];
+        projects[i].todoList.push(new Todo(title, dueDate, description, priority, completed))
+      }
+    }
+
+    console.log(projectStorage);
+    console.log(localStorage.getItem('projects'));
   }
 
   return {
@@ -83,6 +107,8 @@ export default function ManageProject(){
     getProjectList,
     getProjectTodoList,
     deleteProject,
-    deleteTodoList
+    deleteTodoList,
+    updateStorage,
+    getLocalStorage
   }
 }
