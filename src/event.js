@@ -49,11 +49,13 @@ export default function event(){
       return;
     }
     if(target.classList.contains('delete-project')){
-      currentProjectIndex = target.parentNode.dataset.projectIndex;
-      project.deleteProject(currentProjectIndex);
-      screen.updateProjectDisplay(projectsList, project.getProjectList());
-      screen.updateContentDisplay(mainContent);
-      console.log(project.getProjectList())
+      if(confirm('This will delete Project and all Todo list. Delete project?')){
+        currentProjectIndex = target.parentNode.dataset.projectIndex;
+        project.deleteProject(currentProjectIndex);
+        screen.updateProjectDisplay(projectsList, project.getProjectList());
+        screen.updateContentDisplay(mainContent);
+        console.log(project.getProjectList());
+      }
     }
   }
 
