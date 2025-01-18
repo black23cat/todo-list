@@ -40,6 +40,13 @@ export default function event(){
       return;
     }
     if(target.classList.contains('project-btn')){
+      const projectList = document.querySelectorAll('.project-btn');
+      for(let i = 0; i < projectList.length; i++){
+        if(projectList[i].classList.contains('active')){
+          projectList[i].classList.remove('active')
+        }
+      }
+      target.classList.add('active');
       currentProjectIndex = target.parentNode.dataset.projectIndex;
       screen.updateContentDisplay(
         mainContent, 

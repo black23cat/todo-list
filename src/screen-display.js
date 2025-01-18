@@ -1,5 +1,7 @@
 import { formatDistance } from "date-fns";
 import { lightFormat } from 'date-fns';
+import deleteICon from './images/delete.png';
+import deleteTodoIcon from './images/delete-black.png';
 const todayDate = lightFormat(new Date(), 'yyyy-MM-dd');
 
 export default function ScreenDisplay(){
@@ -8,7 +10,7 @@ export default function ScreenDisplay(){
     if(array === undefined) return;
     const addTodoBtn = document.createElement('button');
     addTodoBtn.classList.add('new-todo');
-    addTodoBtn.textContent = '+';
+    addTodoBtn.textContent = 'New Tasks +';
     parentNode.appendChild( addTodoBtn );
     generateContentDisplay(parentNode, array);
   }
@@ -17,18 +19,19 @@ export default function ScreenDisplay(){
     clearParentNode( parentNode );
     if(array.length === 0) return;
     for(let i = 0; i < array.length ; i ++){
-      const projectBtnWrapper = document.createElement('div');
-      const projectName = document.createElement('button');
-      const deleteProjectBtn = document.createElement('button');
-      projectBtnWrapper.classList.add('project-list-wrapper');
-      projectBtnWrapper.setAttribute('data-project-index', i);
+      const projectListWrapper = document.createElement('div');
+      const projectName = document.createElement('div');
+      const deleteProject = document.createElement('img');
+      projectListWrapper.classList.add('project-list-wrapper');
+      projectListWrapper.setAttribute('data-project-index', i);
       projectName.textContent = array[i].projectName;
       projectName.classList.add('project-btn');
-      deleteProjectBtn.textContent = 'X';
-      deleteProjectBtn.classList.add('delete-project');
-      projectBtnWrapper.appendChild(projectName);
-      projectBtnWrapper.appendChild(deleteProjectBtn);
-      parentNode.appendChild(projectBtnWrapper);
+      deleteProject.classList.add('delete-project');
+      deleteProject.src = deleteICon;
+      deleteProject.setAttribute('width', '25px')
+      projectListWrapper.appendChild(projectName);
+      projectListWrapper.appendChild(deleteProject);
+      parentNode.appendChild(projectListWrapper);
     };
   }
   
@@ -43,8 +46,8 @@ export default function ScreenDisplay(){
       const title = document.createElement('h4');
       const dueDate = document.createElement('p');
       const description = document.createElement('p');
-      const priority = document.createElement('span');
-      const deleteTodoBtn = document.createElement('button');
+      const priority = document.createElement('div');
+      const deleteTodo = document.createElement('img');
   
       card.classList.add('todo-card');
       card.setAttribute('data-todo-index', i);
@@ -53,13 +56,14 @@ export default function ScreenDisplay(){
               ${formatDistance( array[i].dueDate, todayDate, {addSuffix: true})}`;
       description.textContent = array[i].description;
 
-      priority.textContent = array[i].priority.toUpperCase();
+      priority.textContent = `${array[i].priority.toUpperCase()} Priority`;
       priority.style.backgroundColor = 
         (array[i].priority === 'low') ? 'lightgreen' :
         (array[i].priority === 'medium') ? '#FFB52E' :
         '#FF0000';
-      deleteTodoBtn.textContent = 'x';
-      deleteTodoBtn.classList.add('delete-todo');
+      deleteTodo.src = deleteTodoIcon;
+      deleteTodo.setAttribute('width', '30px')
+      deleteTodo.classList.add('delete-todo');
 
       if(!array[i].completed){
         description.setAttribute('class', 'todo-desc edit');
@@ -75,7 +79,7 @@ export default function ScreenDisplay(){
       card.appendChild(description);
       card.appendChild(dueDate);
       card.appendChild(priority);
-      card.appendChild(deleteTodoBtn);      
+      card.appendChild(deleteTodo);      
       parentNode.appendChild(card);
     }
   }
