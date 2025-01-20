@@ -33,6 +33,7 @@ export default function event(){
       if(newProjectName === '') return;
       //CODE TO ADD NEW PROJECT
       project.newProject(newProjectName);
+      screen.clearDisplay(mainContent);
       screen.updateProjectDisplay(projectsList, project.getProjectList());
       newProjectForm.reset();
       project.updateStorage();
@@ -110,6 +111,7 @@ export default function event(){
     }
 
     if(target.classList.contains('delete-todo')){
+      if(!confirm('Delete Tasks?')) return;
       mainContent.removeChild(target.parentNode);
       project.deleteTodoList(currentProjectIndex, todoCardIndex);
       screen.updateContentDisplay(
@@ -150,6 +152,6 @@ export default function event(){
   screen.initialize(
     projectsList, mainContent, 
     project.getProjectList(), 
-    project.getProjectTodoList(currentProjectIndex)
+    []
   );
 }

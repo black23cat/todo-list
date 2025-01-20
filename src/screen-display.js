@@ -6,7 +6,7 @@ const todayDate = lightFormat(new Date(), 'yyyy-MM-dd');
 
 export default function ScreenDisplay(){
   const updateContentDisplay = ( parentNode, array) => {
-    clearParentNode( parentNode );
+    clearDisplay( parentNode );
     if(array === undefined) return;
     const addTodoBtn = document.createElement('button');
     addTodoBtn.classList.add('new-todo');
@@ -16,7 +16,7 @@ export default function ScreenDisplay(){
   }
   
   const updateProjectDisplay = ( parentNode, array ) => {
-    clearParentNode( parentNode );
+    clearDisplay( parentNode );
     if(array.length === 0) return;
     for(let i = 0; i < array.length ; i ++){
       const projectListWrapper = document.createElement('div');
@@ -84,20 +84,19 @@ export default function ScreenDisplay(){
     }
   }
 
-  const clearParentNode = (parentNode) => {
+  const clearDisplay = (parentNode) => {
     parentNode.textContent = '';
   }
 
   const initialize = (projectNode, contentNode, projectArr, todoArr) => {   
     if(projectArr.length === 0 || projectArr === undefined) return;
     updateProjectDisplay(projectNode, projectArr);
-    updateContentDisplay(contentNode, todoArr);
-
   }
 
   return {
     updateContentDisplay,
     updateProjectDisplay,
+    clearDisplay,
     initialize
   }
 }
